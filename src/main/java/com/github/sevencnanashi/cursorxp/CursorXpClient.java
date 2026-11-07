@@ -51,7 +51,10 @@ public final class CursorXpClient implements ClientModInitializer {
                 case "雷の魔導書" -> 0xFFFF55;
                 default -> 0x80FF20;
               };
-          context.drawTextWithShadow(client.textRenderer, level, x, y, color);
+          int alpha =
+              client.player.getAttackCooldownProgress(tickDelta) < 1.0F ? 0x80000000 : 0xFF000000;
+          int levelColor = mainHand.getName().getString().equals("魔法の杖") ? 0xFFFFFF : color;
+          context.drawTextWithShadow(client.textRenderer, level, x, y, alpha | levelColor);
 
           List<BigInteger> costs = getMpCosts(spellBook);
           BigInteger availableMp = BigInteger.valueOf(client.player.experienceLevel);
@@ -65,7 +68,7 @@ public final class CursorXpClient implements ClientModInitializer {
                 "●",
                 startX + i * spacing,
                 y + client.textRenderer.fontHeight + 2,
-                dotColor);
+                alpha | dotColor);
           }
         });
   }
